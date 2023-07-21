@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>簡単な一言メモ帳</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #memoInput {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    #memoList {
+      list-style: none;
+      padding: 0;
+    }
+    .memoItem {
+      display: flex;
+      justify-content: space-between;
+      background-color: #f9f9f9;
+      border: 2px solid #9acd32;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    .deleteButton {
+      color: #f44336;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .deleteButton:hover {
+      color: #ff1744;
+    }
+    .addButton {
+      background-color: #2196f3;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+    .addButton:hover {
+      background-color: #0d47a1;
+    }
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      color: #2196f3;
+      margin-bottom: 20px;
+    }
+    .warningMessage {
+      background-color: #ff1744; /* 赤で塗りつぶし */
+      color: white; /* 白で文字を表示 */
+      font-size: 18px;
+      padding: 10px 20px; /* 余白を追加 */
+      display: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>簡単な一言メモ帳</h1>
+  <input type="text" id="memoInput" placeholder="メモを入力してください">
+  <button class="addButton" onclick="addMemo()">追加</button>
+  <p class="warningMessage" id="warningMessage">すでに存在するメモです</p> <!-- 警告メッセージを追加 -->
+
+  <ul id="memoList"></ul>
+
+  <script>
+    // メモを追加する関数
+    function addMemo() {
+      var input = document.getElementById("memoInput");
+      var memoText = input.value.trim();
+
+      if (memoText !== "") {
+        var memoList = document.getElementById("memoList");
+        
+        // すでに存在するメモかどうかチェック
+        var isDuplicate = false;
+        var memos = memoList.getElementsByClassName("memoText");
+        for (var i = 0; i < memos.length; i++) {
+          if (memos[i].textContent === memoText) {
+            isDuplicate = true;
+            break;
+          }
+        }
+
+        if (!isDuplicate) {
+          var li = document.createElement("li");
+          li.className = "memoItem";
+
+          var memoTextElement = document.createElement("span");
+          memoTextElement.className = "memoText";
+          memoTextElement.textContent = memoText;
+
+          var deleteButton = document.createElement("span");
+          deleteButton.className = "deleteButton";
+          deleteButton.textContent = "削除";
+          deleteButton.addEventListener("click", function() {
+            memoList.removeChild(li);
+          });
+
+          li.appendChild(memoTextElement);
+          li.appendChild(deleteButton);
+          memoList.appendChild(li);
+
+          input.value = "";
+
+          // 警告メッセージを非表示にする
+          document.getElementById("warningMessage").style.display = "none";
+        } else {
+          // 警告メッセージを表示する
+          document.getElementById("warningMessage").style.display = "block";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
